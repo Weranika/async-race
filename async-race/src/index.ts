@@ -1,5 +1,7 @@
 import './reset.css';
+import App from './pages/app/index';
 
-document.getElementById('root') as HTMLElement;
+const app = new App();
+app.run();
 
-console.log('hi');
+//document.getElementById('root') as HTMLElement;

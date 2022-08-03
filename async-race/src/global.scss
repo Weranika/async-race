@@ -1,28 +1,14 @@
-$color-light: rgb(240, 240, 240);
-$color-light-xs: rgb(250, 250, 250);
-$color-light-s: rgb(232, 232, 241);
-$color-light-blue: rgb(230, 240, 245);
-$color-dark-s: rgb(187, 187, 187);
-$color-dark-m: rgb(89, 89, 92);
-$color-dark-l: rgb(47, 47, 71);
-$color-dark-xl: rgb(19,18,43);
-
-$HEADER-CONTAINER-WIDTH: 1000px;
-$HEADER-CONTAINER-HEIGHT: 70px;
-$FOOTER-HEIGHT:7vh;
-$WIDTH: 90vw;
+html {
+  width: 100%;
+}
 
 body {
-  background-color: $color-light;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  width: 1300px;
   height: 100%; 
   margin: 0 auto;
-  background-image: url('../src/assets/img/background-patio-img.jpg');
-  background-attachment: fixed
-}
-main {
-  width: $WIDTH;
-  min-height: calc(100vh - $HEADER-CONTAINER-HEIGHT - $FOOTER-HEIGHT);
-  margin: calc($HEADER-CONTAINER-HEIGHT) auto 0;
-  padding-top: 20px;
-  display: flex;
+  background-image: url('../src/assets/img/car-backgr.jpg');
+  background-repeat: no-repeat;
 }

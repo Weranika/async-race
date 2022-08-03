@@ -1,0 +1,37 @@
+$color-light: rgb(240, 240, 240);
+$color-grey: rgb(52, 42, 55);
+$color-grey-s: rgb(81, 61, 74);
+$color-grey-m: rgb(53, 29, 44);
+
+
+$HEADER-BUTTON-WIDTH: 70px;
+$HEADER-BUTTON-HEIGHT: 23px;
+$WIDTH-PARAM-CONTAINER: 20rem;
+
+@mixin button($bckgr-color, $width: $HEADER-BUTTON-WIDTH, $color: rgb(237, 237, 237), $height: $HEADER-BUTTON-HEIGHT) {
+  color: $color;
+  width: $width;
+  height: $height;
+  background-color: $bckgr-color;
+  border-radius: 5px;
+  border: none;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 5px;
+  &:active, &:hover, &:focus {
+    cursor: pointer;
+    background-color: $color-grey-m;
+  }
+}
+.buttons-race-container {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: $WIDTH-PARAM-CONTAINER;
+}
+.button-race, .button-reset {
+  @include button($color-grey);
+}
+.button-generate {
+  @include button($color-grey-s, 50%);
+}

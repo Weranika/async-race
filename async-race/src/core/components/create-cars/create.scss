@@ -1,0 +1,44 @@
+$color-light: rgb(240, 240, 240);
+$color-grey: rgb(92, 75, 96);
+$color-grey-m: rgb(53, 29, 44);
+
+$HEADER-BUTTON-WIDTH: 70px;
+$HEADER-BUTTON-HEIGHT: 23px;
+$WIDTH-PARAM-CONTAINER: 20rem;
+
+.create-car-container,
+.update-car-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: $WIDTH-PARAM-CONTAINER;
+  height: 1.5rem;
+  margin: 10px;
+  .input-create,
+  .input-update {
+    border: 1px solid $color-grey-m;
+    color: $color-grey-m;
+    border-radius: 5px;
+    width: 70%;
+  }
+  button {
+    width: $HEADER-BUTTON-WIDTH;
+    height: $HEADER-BUTTON-HEIGHT;
+    border-radius: 5px;
+    font-size: 11px;
+    background-color: $color-grey;
+    color: $color-light;
+    font-weight: bold;
+    &:active, &:hover, &:focus {
+      cursor: pointer;
+      background-color: $color-grey-m;
+    }
+  }
+}
+input[type="color"] {
+	width: 50px;
+	border: none;
+	border-radius: 40px;
+	background: none;
+  margin: 5px;
+}
