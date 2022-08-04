@@ -29,13 +29,16 @@ $WIDTH-PARAM-CONTAINER: 20rem;
   align-items: center;
   margin-top: 2vh;
 }
-
+.road {
+  display: flex;
+  align-items: center;
+  width: 90%;
+}
 .car-track {
   display: flex;
   border-bottom: 3px dotted $color-light;
   width:1250px;
   height: 65px;
-  align-items: center;
 }
 .car-info-container, 
 .title-container, 
@@ -44,6 +47,10 @@ $WIDTH-PARAM-CONTAINER: 20rem;
 }
 h1, h2 {
   margin-right: 10px;
+}
+.car-brand {
+  font-size: 20px;
+  font-weight: bold
 }
 .select-button, .remove-button {
   @include button($color-grey);

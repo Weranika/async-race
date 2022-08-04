@@ -6,6 +6,10 @@ $color-grey-m: rgb(53, 29, 44);
 $HEADER-BUTTON-WIDTH: 70px;
 $HEADER-BUTTON-HEIGHT: 23px;
 $WIDTH-PARAM-CONTAINER: 20rem;
+$CAR-TRACK-WIDTH: 1000px;
+
+$CAR-WIDTH: 150px;
+$CAR-HEIGHT: 65px;
 
 @mixin button($bckgr-color, $width: $HEADER-BUTTON-WIDTH, $color: rgb(237, 237, 237), $height: $HEADER-BUTTON-HEIGHT) {
   color: $color;
@@ -30,10 +34,29 @@ $WIDTH-PARAM-CONTAINER: 20rem;
   margin-top: 2vh;
 }
 .car-track {
-  width: 1000px;
+  width: $CAR-TRACK-WIDTH;
+}
+.control-button {
+  @include button($color-light, 20px, 20px, rgb(53, 29, 44));
+  font-size: 15px;
 }
 .car {
-  width: 150px;
-  height: 65px;
+  width:$CAR-WIDTH;
+  height: $CAR-HEIGHT;
   padding-left: 10px;
+  position: relative;
+}
+.car:hover {
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: translate(calc($CAR-TRACK-WIDTH + 50px),0);
+  transition: all 3s ease-in-out;
+}
+
+.flag {
+  font-size: 35px;
+  position: relative;
+  top: 20px;
+  left: -40px;
 }
