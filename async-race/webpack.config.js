@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const baseConfig = {
     entry: './src/index.ts',
@@ -20,11 +21,8 @@ const baseConfig = {
                 use: 'ts-loader'
             },
             {
-                test: /\.(gif|png|jpg|jpeg|svg)?$/,
-                loader: 'url-loader',
-                options: {
-                    name: 'assets/img/[name].[ext]',
-                },
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                type: 'asset/resource'
             },
             {
                 test: /\.scss$/,
@@ -37,16 +35,24 @@ const baseConfig = {
                 'sass-loader',
                 ],
             },
+            {
+                test: /\.html/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'static/[hash][ext][query]'
+                }
+            }
         ],
     },
     resolve: {
         extensions: ['.ts', '.js'],
     },
     output: {
-        filename: 'index.js',
+        filename: 'bundle.js',
         path: path.resolve(__dirname, '../dist'),
     },
     plugins: [
+        new AssetsPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',

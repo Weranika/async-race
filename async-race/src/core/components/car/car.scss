@@ -3,7 +3,6 @@ $color-grey: rgb(52, 42, 55);
 $color-grey-s: rgb(81, 61, 74);
 $color-grey-m: rgb(53, 29, 44);
 
-
 $HEADER-BUTTON-WIDTH: 70px;
 $HEADER-BUTTON-HEIGHT: 23px;
 $WIDTH-PARAM-CONTAINER: 20rem;
@@ -18,20 +17,23 @@ $WIDTH-PARAM-CONTAINER: 20rem;
   font-size: 11px;
   font-weight: bold;
   padding: 5px;
+  margin-right: 10px;
   &:active, &:hover, &:focus {
     cursor: pointer;
     background-color: $color-grey-m;
   }
 }
-.buttons-race-container {
-  margin: 10px 0;
+
+@mixin flex-container() {
   display: flex;
-  justify-content: space-between;
-  width: $WIDTH-PARAM-CONTAINER;
+  align-items: center;
+  margin-top: 2vh;
 }
-.button-race, .button-reset {
-  @include button($color-grey);
+.car-track {
+  width: 1000px;
 }
-.button-generate {
-  @include button($color-grey-s, 50%);
+.car {
+  width: 150px;
+  height: 65px;
+  padding-left: 10px;
 }
