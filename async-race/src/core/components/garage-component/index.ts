@@ -1,44 +1,30 @@
 import Component from '../../templates/components';
 import Car from '../car';
 import './garage-list.scss';
+import { GetCars } from '../../../pages/app/api';
+export interface ICar {
+  name: string,
+  color: string,
+  id: string
+}
+interface IGetCars {
+  data: Array<ICar>,
+  carsCount: string | null,
+}
 
-class GarageList extends Component {
-  private carContainer:HTMLElement;
-  private car: Car;
+class CarList extends Component {
+  private carList: Array<Car>;
+  
 
-  constructor(tagName: string, className: string) {
+  constructor(tagName: string, className: string, carList: Array<Car>) {
     super(tagName, className);
-    this.carContainer = document.createElement('div');
-    this.carContainer.className = 'car-container';
-    this.car = new Car('div', 'car');
+    this.carList = carList;
+   // this.car = new Car('div', 'car', this.car.carInst);
   }
 
-  carInfo () {
-    const carInfoContainer  = document.createElement('div');
-    carInfoContainer.className = 'car-info-container';
+  async carInfo () {
+    const cars = await GetCars(1);
 
-    const selectButton = document.createElement('button');
-    selectButton.id = 'select-button';
-    selectButton.innerText = 'SELECT';
-    selectButton.className = 'select-button';
-
-    const removeButton = document.createElement('button');
-    removeButton.id = 'remove-button';
-    removeButton.innerText = 'REMOVE';
-    removeButton.className = 'remove-button';
-
-    const carBrand  = document.createElement('div');
-    carBrand.id = 'car-brand';
-    carBrand.innerText = 'Peugeot';
-    carBrand.className = 'car-brand';
-
-    carInfoContainer.append(selectButton);
-    carInfoContainer.append(removeButton);
-    carInfoContainer.append(carBrand);
-    this.carContainer.append(carInfoContainer);
-  }
-
-  render() {
     const titleContainer = document.createElement('div');
     titleContainer.className = 'title-container';
 
@@ -47,7 +33,7 @@ class GarageList extends Component {
     titleContainer.append(title);
 
     const items = document.createElement('span');
-    items.innerText = '7';
+    items.innerText = cars.carsCount as string;
     titleContainer.append(items);
 
     const pageNumberContainer = document.createElement('div');
@@ -59,16 +45,28 @@ class GarageList extends Component {
 
     const pageNumber = document.createElement('span');
     pageNumber.innerText = '1';
+
     pageNumberContainer.append(pageNumber);
-    
     this.container.append(titleContainer);
     this.container.append(pageNumberContainer);
-    this.container.append(this.carContainer);
+  }
 
-    this.carInfo();
-    this.carContainer.append(this.car.render());
+  async renderCars() {
+    //const cars:IGetCars = await GetCars(1);
+    
+    return `
+      <ul class='car-container'>
+        ${this.carList.map((car) => `<li>${car.render()}</li>`)}
+      </ul>`
+  }
+
+  render() {
+    //const MyComponent = () => Promise.resolve(this.container.append(this.renderCars());
+    const Component = this.renderCars().then((resolve) => console.log(resolve));
+    this.container.append('this.renderCars()');
     return this.container;
+    
   }
 }
 
-export default GarageList;
+export default CarList;

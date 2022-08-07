@@ -1,17 +1,29 @@
 import Component from '../../templates/components';
 import './car.scss';
 import path from './pathSvg';
+import { ICar } from '../garage-component';
+//import GetCars from '../../../pages/app/api';
 
 class Car extends Component {
   private carTrack:HTMLElement;
+  private car:ICar;
 
-  constructor(tagName: string, className: string) {
+  constructor(tagName: string, className: string, car:ICar) {
     super(tagName, className);
     this.carTrack = document.createElement('div');
     this.carTrack.className = 'car-track';
+    this.car = car;
+  }
+  get carInst() {
+    return this.car;
   }
 
-  renderCar = (id: string, color:string) => `
+  renderCar = (id: string, name:string, color:string) => `
+  <div class='car-info-container'>
+    <button class='select-button' id='select-button-${id}'>SELECT</button>
+    <button class='remove-button' id='remove-button-${id}'>REMOVE</button>
+    <div id=${id} className='car-model'>${name}</div>
+  </div>
   <div class='road'>
     <div class='control-panel'>
       <button class='control-button start-button' id='start-button-${id}'>A</button>
@@ -30,7 +42,7 @@ class Car extends Component {
   `
 
   render() {
-    this.carTrack.innerHTML = this.renderCar('bmv', 'red');
+    this.carTrack.innerHTML = this.renderCar(this.car.id, this.car.name, this.car.color);
     return this.carTrack;
   }
 }
