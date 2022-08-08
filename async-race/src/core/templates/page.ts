@@ -13,7 +13,7 @@ abstract class Page {
     return headerTitle;
   }
 
-  render() {
+  async render() {
     return this.container;
   }
 }

@@ -7,6 +7,9 @@ $HEADER-BUTTON-WIDTH: 70px;
 $HEADER-BUTTON-HEIGHT: 23px;
 $WIDTH-PARAM-CONTAINER: 20rem;
 
+$CAR-TRACK-HEIGHT: 90px;
+$CAR-TRACK-WIDTH: 100%;
+
 @mixin button($bckgr-color, $width: $HEADER-BUTTON-WIDTH, $color: rgb(237, 237, 237), $height: $HEADER-BUTTON-HEIGHT) {
   color: $color;
   width: $width;
@@ -29,16 +32,18 @@ $WIDTH-PARAM-CONTAINER: 20rem;
   align-items: center;
   margin-top: 2vh;
 }
-.road {
+.car-container {
+  list-style-type: none;
+}
+.road, .control-panel {
   display: flex;
   align-items: center;
-  width: 90%;
+  justify-content: space-between;
 }
 .car-track {
-  display: flex;
   border-bottom: 3px dotted $color-light;
-  width:1250px;
-  height: 65px;
+  width: $CAR-TRACK-WIDTH;
+  height: $CAR-TRACK-HEIGHT;
 }
 .car-info-container, 
 .title-container, 

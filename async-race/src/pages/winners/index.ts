@@ -9,7 +9,7 @@ class WinnersPage extends Page{
     super(id);
   }
 
-  render() {
+  async render() {
     const title = this.createHeader(WinnersPage.TextObject.winnersTitle);
     this.container.append(title);
     return this.container;

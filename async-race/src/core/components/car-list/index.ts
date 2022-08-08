@@ -13,13 +13,12 @@ interface IGetCars {
 }
 
 class CarList extends Component {
-  private carList: Array<Car>;
+  private carList: Array<ICar>;
   
 
-  constructor(tagName: string, className: string, carList: Array<Car>) {
+  constructor(tagName: string, className: string, carList: Array<ICar>) {
     super(tagName, className);
     this.carList = carList;
-   // this.car = new Car('div', 'car', this.car.carInst);
   }
 
   async carInfo () {
@@ -49,23 +48,24 @@ class CarList extends Component {
     pageNumberContainer.append(pageNumber);
     this.container.append(titleContainer);
     this.container.append(pageNumberContainer);
+
+    return this.container;
   }
 
   async renderCars() {
-    //const cars:IGetCars = await GetCars(1);
-    
-    return `
-      <ul class='car-container'>
-        ${this.carList.map((car) => `<li>${car.render()}</li>`)}
-      </ul>`
-  }
 
-  render() {
-    //const MyComponent = () => Promise.resolve(this.container.append(this.renderCars());
-    const Component = this.renderCars().then((resolve) => console.log(resolve));
-    this.container.append('this.renderCars()');
-    return this.container;
-    
+    const ul = document.createElement('ul')
+    ul.classList.add('car-container');
+
+    this.carList.forEach((car) => {
+      const carInst = new Car(car, 'div', 'car-track').render();
+
+      console.log('CARINST:', carInst)
+      const li = document.createElement('li');
+      li.appendChild(carInst);
+      ul.appendChild(li);
+    })
+    return ul;
   }
 }
 

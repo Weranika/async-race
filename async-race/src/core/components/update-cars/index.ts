@@ -1,5 +1,6 @@
 import Component from '../../templates/components';
 import '../create-cars/create.scss';
+import { updateCarHandler } from '../../../pages/app/hendlers';
 
 class UpdateCars extends Component {
   constructor(tagName: string, className: string) {
@@ -26,6 +27,7 @@ class UpdateCars extends Component {
     const buttonUpdateCar = document.createElement('button');
     buttonUpdateCar.id = 'button-update-car';
     buttonUpdateCar.innerText = 'UPDATE';
+    buttonUpdateCar.addEventListener("click", updateCarHandler);
     this.container.append(buttonUpdateCar);
   }
 

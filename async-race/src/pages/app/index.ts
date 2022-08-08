@@ -16,7 +16,7 @@ class App {
   private header: Header;  
   private static defaultPageId = 'current-page';
 
-  static renderNewPage(idPage: string) {
+  static async renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
     if (currentPageHTML) {
       currentPageHTML.remove();
@@ -32,13 +32,13 @@ class App {
     }
 
     if (page) {
-      const pageHTML = page.render();
+      const pageHTML = await page.render();
       pageHTML.id = App.defaultPageId;
       App.container.append(pageHTML);
     }
   }
 
-  private enableRouteChange() {
+  public enableRouteChange() {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
       App.renderNewPage(hash);

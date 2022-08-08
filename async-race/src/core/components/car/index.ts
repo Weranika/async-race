@@ -1,14 +1,14 @@
 import Component from '../../templates/components';
 import './car.scss';
 import path from './pathSvg';
-import { ICar } from '../garage-component';
-//import GetCars from '../../../pages/app/api';
+import { ICar } from '../car-list';
+import { carTrackHandler } from '../../../pages/app/hendlers';
 
 class Car extends Component {
   private carTrack:HTMLElement;
   private car:ICar;
 
-  constructor(tagName: string, className: string, car:ICar) {
+  constructor(car:ICar, tagName: string, className: string) {
     super(tagName, className);
     this.carTrack = document.createElement('div');
     this.carTrack.className = 'car-track';
@@ -25,7 +25,8 @@ class Car extends Component {
     <div id=${id} className='car-model'>${name}</div>
   </div>
   <div class='road'>
-    <div class='control-panel'>
+  <div class='control-panel'>
+    <div>
       <button class='control-button start-button' id='start-button-${id}'>A</button>
       <button class='control-button stop-button' id='stop-button-${id}'>B</button>
     </div>
@@ -38,11 +39,14 @@ class Car extends Component {
       </svg>
     </div>
   </div>
-  <div class='flag id='flag-${id}>&#127937;</div>
+    <div class='flag id='flag-${id}>&#127937;</div>
+  </div>
+  
   `
 
   render() {
     this.carTrack.innerHTML = this.renderCar(this.car.id, this.car.name, this.car.color);
+    this.carTrack?.addEventListener("click", carTrackHandler);
     return this.carTrack;
   }
 }
