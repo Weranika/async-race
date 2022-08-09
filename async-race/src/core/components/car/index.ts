@@ -26,7 +26,7 @@ class Car extends Component {
   </div>
   <div class='road'>
   <div class='control-panel'>
-    <div>
+    <div class='start-stop-buttons'>
       <button class='control-button start-button' id='start-button-${id}'>A</button>
       <button class='control-button stop-button' id='stop-button-${id}'>B</button>
     </div>

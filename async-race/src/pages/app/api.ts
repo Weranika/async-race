@@ -2,7 +2,7 @@ const server = 'http://127.0.0.1:3000';
 
 const garage = `${server}/garage`;
 
-export const GetCars = async (page:number, limit = 100) => {
+export const GetCars = async (page:number, limit = 7) => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`);
   return {
     data: await response.json(),
@@ -12,6 +12,10 @@ export const GetCars = async (page:number, limit = 100) => {
 
 export const createCar = async (name:string, color:string) => {
   const response = await fetch(`${garage}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
       body: JSON.stringify({
         name: name,
         color: color

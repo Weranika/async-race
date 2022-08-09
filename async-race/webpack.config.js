@@ -34,13 +34,6 @@ const baseConfig = {
                 'css-loader',
                 'sass-loader',
                 ],
-            },
-            {
-                test: /\.html/,
-                type: 'asset/resource',
-                generator: {
-                    filename: 'static/[hash][ext][query]'
-                }
             }
         ],
     },

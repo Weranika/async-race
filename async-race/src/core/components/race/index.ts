@@ -1,5 +1,6 @@
 import Component from '../../templates/components';
 import './race.scss';
+import { generateRandomCars } from '../../../pages/app/hendlers';
 
 class Race extends Component {
   constructor(tagName: string, className: string) {
@@ -25,6 +26,7 @@ class Race extends Component {
     buttonGenerate.id = 'button-generate';
     buttonGenerate.innerText = 'GENERATE CARS';
     buttonGenerate.className = 'button-generate';
+    buttonGenerate.addEventListener("click", generateRandomCars);
     this.container.append(buttonGenerate);
   }
 

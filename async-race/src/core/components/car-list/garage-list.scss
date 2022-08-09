@@ -8,7 +8,7 @@ $HEADER-BUTTON-HEIGHT: 23px;
 $WIDTH-PARAM-CONTAINER: 20rem;
 
 $CAR-TRACK-HEIGHT: 90px;
-$CAR-TRACK-WIDTH: 100%;
+$CAR-TRACK-WIDTH: 80vw;
 
 @mixin button($bckgr-color, $width: $HEADER-BUTTON-WIDTH, $color: rgb(237, 237, 237), $height: $HEADER-BUTTON-HEIGHT) {
   color: $color;
@@ -26,6 +26,9 @@ $CAR-TRACK-WIDTH: 100%;
     background-color: $color-grey-m;
   }
 }
+.garage-list {
+  margin-bottom: 10px;
+}
 
 @mixin flex-container() {
   display: flex;
@@ -34,6 +37,11 @@ $CAR-TRACK-WIDTH: 100%;
 }
 .car-container {
   list-style-type: none;
+  background-color: rgba(6, 6, 6, 0.4);
+  padding: 10px;
+  border-radius: 5px;
+  width: 80vw;
+  min-height: 60vh;
 }
 .road, .control-panel {
   display: flex;

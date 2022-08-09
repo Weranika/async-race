@@ -42,6 +42,7 @@ class App {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
       App.renderNewPage(hash);
+      console.log('hash')
     });
   }
 

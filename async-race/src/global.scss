@@ -17,4 +17,6 @@ body {
   padding: 10px;
   color: $color-light;
   background-color: rgb(24, 23, 23);
+  background-size: 100%;
+  box-sizing: border-box;
 }

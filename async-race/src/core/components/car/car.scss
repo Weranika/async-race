@@ -6,7 +6,9 @@ $color-grey-m: rgb(53, 29, 44);
 $HEADER-BUTTON-WIDTH: 70px;
 $HEADER-BUTTON-HEIGHT: 23px;
 $WIDTH-PARAM-CONTAINER: 20rem;
-$CAR-TRACK-WIDTH: 100%;
+$CAR-TRACK-WIDTH: 70vw;
+
+$START-STOP-WIDTH: 70px;
 
 $CAR-WIDTH: 150px;
 $CAR-HEIGHT: 65px;
@@ -40,6 +42,9 @@ $CAR-HEIGHT: 65px;
   @include button($color-light, 20px, 20px, rgb(53, 29, 44));
   font-size: 15px;
 }
+.start-stop-buttons {
+  width: $START-STOP-WIDTH;
+}
 .car {
   width:$CAR-WIDTH;
   height: $CAR-HEIGHT;
@@ -50,7 +55,7 @@ $CAR-HEIGHT: 65px;
   position: relative;
   top: 0;
   left: 0;
-  transform: translate(calc($CAR-TRACK-WIDTH + 50px),0);
+  transform: translate(calc($CAR-TRACK-WIDTH - $START-STOP-WIDTH - 1vw),0);
   transition: all 3s ease-in-out;
 }
 
@@ -58,5 +63,5 @@ $CAR-HEIGHT: 65px;
   font-size: 35px;
   position: relative;
   top: 15px;
-  left: -50px;
+  left: - calc($CAR-WIDTH);
 }

@@ -9,7 +9,7 @@ class UpdateCars extends Component {
 
   UpdateCarInput () {
     const inputUpdateCar = document.createElement('input');
-    inputUpdateCar.id = 'input-update-cars';
+    inputUpdateCar.id = 'input-update-name';
     inputUpdateCar.className = 'input-update';
     inputUpdateCar.type = 'text';
     this.container.append(inputUpdateCar);
@@ -17,7 +17,7 @@ class UpdateCars extends Component {
 
   UpdateCarColor () {
     const inputUpdateColor = document.createElement('input');
-    inputUpdateColor.id = 'input-color';
+    inputUpdateColor.id = 'input-color-update';
     inputUpdateColor.type = 'color';
     inputUpdateColor.value='#712056';
     this.container.append(inputUpdateColor);
