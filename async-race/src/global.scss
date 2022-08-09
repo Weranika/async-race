@@ -10,13 +10,13 @@ body {
     sans-serif;
   max-width: 1300px;
   width: 80vw;
-  height: 100%; 
+  height: 100vh; 
   margin: 0 auto;
   background-image: url('../src/assets/img/car-backgr.jpg');
   background-repeat: no-repeat;
   padding: 10px;
   color: $color-light;
-  background-color: rgb(24, 23, 23);
-  background-size: 100%;
+  background-color: rgb(149, 130, 147);
+  background-size: 100% 100%;
   box-sizing: border-box;
 }

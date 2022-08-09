@@ -53,7 +53,6 @@ class CarList extends Component {
   }
 
   async renderCars() {
-
     const ul = document.createElement('ul')
     ul.classList.add('car-container');
 

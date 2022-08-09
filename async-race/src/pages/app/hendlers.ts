@@ -20,9 +20,9 @@ export async function createCarHandler() {
 }
 
 export async function updateCarHandler() {
-  
   const selected = document.querySelector('[selected="selected"]');
   const selectedCarId = selected?.id.substring('select-button-'.length) as string;
+  const selectedCar = document.getElementById(selectedCarId);
   
   const inputColor = document.getElementById('input-color-update') as HTMLInputElement;
   const newColor = inputColor.value;
@@ -35,9 +35,12 @@ export async function updateCarHandler() {
 }
 
 export async function generateRandomCars() {
+  alert('please, wait')
   for (let i = 0; i < 100; i++) {
     const created100Cars = await createCar(createRandomName(), createRandomColor());
+    
   }
+  window.location.reload();
   console.log('Cars were added');
 }
 
@@ -51,8 +54,9 @@ export async function carTrackHandler(event:MouseEvent) {
     window.dispatchEvent(new HashChangeEvent("hashchange"))
   } else if (id.startsWith('select')) {
     const selectedCar = await getCar(carId);
-    //console.log(selectedCar.data);
     document.getElementById(id)?.setAttribute('selected', 'selected');
+    const inputName = document.getElementById('input-update-name') as HTMLInputElement;
+    inputName.value = `${selectedCar.data.name}`
   }
 
 }

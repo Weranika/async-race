@@ -23,7 +23,7 @@ class App {
     }
     let page: Page | null = null;
 
-    if (idPage === PageIds.GaragePage) {
+    if (idPage === PageIds.GaragePage || idPage ==='') {
       page = new Garage(idPage);
     } else if (idPage === PageIds.WinnersPage) {
       page = new WinnersPage(idPage);
