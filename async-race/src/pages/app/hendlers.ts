@@ -6,6 +6,11 @@ import { createRandomName, createRandomColor, calcWinPageNumber } from './utils'
 import { calcPageNumber } from './utils';
 import WinnersPage from '../../pages/winners/index';
 
+interface IWin {
+  id: string,
+  wins: number,
+  time: number
+}
 localStorage.setItem('page', '1');
 localStorage.setItem('pageWinners', '1');
 localStorage.setItem('sort', 'id');
@@ -67,6 +72,7 @@ export async function raceAllHandler() {
   const carsOnPageResp = await Garage.getCars(+currPage);
   const cars = await carsOnPageResp.data;
   console.log(cars, 'cars on page');
+  let arrTime:Array<IWin> = [];
 
   const carByClass = cars.map(async(car:HTMLElement) => {
     const carId = car.id;
@@ -75,6 +81,7 @@ export async function raceAllHandler() {
     const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
     const speed = +((response.data.distance / response.data.velocity) / 1000).toFixed(2);
     const passed = Math.round( distanse / speed);
+    
     if (response) {
       const status = await switchCarEngine(carId, 'drive');
       if (status?.status === 'stopped') {
@@ -86,20 +93,23 @@ export async function raceAllHandler() {
         div.style.transform = `translateX(${distanse}px)`;
         div.style.transition = `all ${speed}s ease-in-out`;
         try{
-          const winner = await getWinner(carId);
-          
-          //await updateWinners(carId, winInf.wins, speed.toString());
+          const winner = await getWinner(carId);          
+          const winnerData = winner.data;          
+          arrTime.push(winnerData);       
         }
-         catch (e){
+        catch (e){
           const createWinn = await createWinners(carId, speed.toString());
-         } 
-        
+        } 
       }
     }
   });
   const res = await Promise.all(carByClass);
-  
-  //alert('')
+  const firstTime = arrTime.sort((a, b) => a.time -  b.time); 
+  const selectedCar = await getCar(firstTime[0].id);
+  const selectedCarInf = selectedCar.data;
+
+  alert(`Wins ${selectedCarInf.name}, time: ${firstTime[0].time}`);
+  arrTime = [];
 }
 
 export async function carTrackHandler(event:MouseEvent) {
