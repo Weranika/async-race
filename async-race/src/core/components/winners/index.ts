@@ -75,7 +75,7 @@ class WinnersComponent extends Component {
     time.id = 'time';
     time.classList.add('car-win-butt');
     time.addEventListener("click", timeSort);
-    time.setAttribute('toggle', 'toggle');
+    //time.setAttribute('toggle', 'toggle');
     winTitle.append(time);
 
     const wins = document.createElement('button');

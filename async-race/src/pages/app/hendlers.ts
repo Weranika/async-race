@@ -2,13 +2,20 @@ import { createCar } from "./api";
 import CarList, { ICar } from "../../core/components/car-list";
 import { deleteCar, getCar, updateCar, createWinners, startStopEngine, switchCarEngine, getWinners, getWinner } from "../app/api";
 import Garage from "../garage";
-import { createRandomName, createRandomColor } from './utils';
+import { createRandomName, createRandomColor, calcWinPageNumber } from './utils';
 import { calcPageNumber } from './utils';
 import WinnersPage from '../../pages/winners/index';
 
 localStorage.setItem('page', '1');
 localStorage.setItem('pageWinners', '1');
+localStorage.setItem('sort', 'id');
+localStorage.setItem('order', 'ASC');
+
+const sort = localStorage.getItem('sort') as string;
+const order = localStorage.getItem('order') as string;
+
 let currPage = localStorage.getItem('page') as string;
+let currPageWin = localStorage.getItem('pageWinners') as string;
 
 async function recreateCars() {
   const cars = await Garage.getCars(1);
@@ -91,15 +98,8 @@ export async function raceAllHandler() {
     }
   });
   const res = await Promise.all(carByClass);
-  // res.map(async())
-  // const winner = await getWinner(carId);
-  //       console.log(winner, 'winner');
-  //       const winInf = await winner.data;
-  //       console.log(winInf, winInf.wins, 'data');
-  //       const createWinn = await createWinners(carId, winInf.wins, speed.toString());
-  //       window.dispatch
-
-  console.log(res, '<======')
+  
+  //alert('')
 }
 
 export async function carTrackHandler(event:MouseEvent) {
@@ -161,33 +161,50 @@ export async function nextHandler() {
     window.dispatchEvent(new HashChangeEvent("hashchange"));
   }
 }
+export async function prevHandlerWin() {
+  const pages = await calcWinPageNumber();
+  console.log(pages, +currPageWin)
+  if (+currPageWin <= pages && +currPageWin > 1) {
+    currPageWin = (+currPageWin - 1).toString();
+    localStorage.setItem('pageWinners', `${+currPageWin}`);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  }
+}
+export async function nextHandlerWin() {
+  const pages = await calcWinPageNumber();
+  if (+currPageWin < pages && +currPageWin >= 1) {
+    currPageWin = (+currPageWin + 1).toString();
+    localStorage.setItem('pageWinners', `${+currPageWin}`);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  }
+}
 
 export async function timeSort() {
-  const time = document.getElementById('time');
-  if(time?.hasAttribute('toggle')) {
-    //  const cars = await getWinners(+currPage, 'time', 'ASC', 10);
-    
+  //console.log('toggle')
+  const time = document.getElementById('time') as HTMLElement;
+  console.log(time)
+  if (time?.hasAttribute('toggle')) {
+    localStorage.setItem('sort', 'time');
     time.removeAttribute('toggle');
-    WinnersPage.renderWin('time', 'ASC');
-    //return cars;
+    console.log('toggle')
   } else {
-    //const cars = await getWinners(+currPage, 'time', 'DESC', 10);
+    localStorage.setItem('order', 'DESC');
     time?.setAttribute('toggle', 'toggle');
-    WinnersPage.renderWin('time', 'DESC');
-    //return cars;
+    console.log('no toggle')
   }  
-  //window.dispatchEvent(new HashChangeEvent("hashchange"))
+  window.dispatchEvent(new HashChangeEvent("hashchange"))
 }
 
 export async function winsSort() {
   const wins = document.getElementById('wins');
   if(wins?.hasAttribute('toggle')) {
-    const cars = await getWinners(+currPage, 'wins', 'ASC', 10);
+    const cars = await getWinners(+currPageWin, 'wins', 'ASC', 10);
     wins.removeAttribute('toggle');
   } else {
-    const cars = await getWinners(+currPage, 'wins', 'DESC', 10);
+    const cars = await getWinners(+currPageWin, 'wins', 'DESC', 10);
     
     wins?.setAttribute('toggle', 'toggle');
   }  
   window.dispatchEvent(new HashChangeEvent("hashchange"));
 }
+
