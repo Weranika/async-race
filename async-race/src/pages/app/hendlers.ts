@@ -126,15 +126,21 @@ export async function carTrackHandler(event:MouseEvent) {
     inputName.value = `${selectedCar.data.name}`;
   } else if (id.startsWith('start-button')) {
     const carId = id.substring('start-button-'.length);
+    console.log(carId)
     const response = await startStopEngine(carId, 'started');
 
     const car = document.getElementById(`car-${carId}`) as HTMLElement;
     const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
     const speed = (response.data.distance / response.data.velocity) / 1000;
     const passed = Math.round( distanse / speed);
-    
+        
+    const stopBtn = document.getElementById(`stop-button-${carId}`) as HTMLButtonElement;
+    console.log(stopBtn)
+    stopBtn.disabled = true;
+
     if (response) {
       const status = await switchCarEngine(carId, 'drive');
+      stopBtn.disabled = false;
       if (status?.status === 'stopped') {
         console.log(carId, '500')
         car.style.transform = `translateX(${passed}px)`;
@@ -146,18 +152,22 @@ export async function carTrackHandler(event:MouseEvent) {
     }
   } else if (id.startsWith('stop-button')) {
     const carId = id.substring('stop-button-'.length);
-    const response = await startStopEngine(carId, 'stopped');
 
+    const startBtn = document.getElementById(`start-button-${carId}`) as HTMLButtonElement;
+    startBtn.disabled = true;
+
+    const response = await startStopEngine(carId, 'stopped');
     const car = document.getElementById(`car-${carId}`) as HTMLElement;
     car.style.transform = `translateX(${0}px)`;
     car.style.transition = `all 0.5s ease-in`;
+    startBtn.disabled = false;
   }
 }
 
 export async function prevHandler() {
   const pages = await calcPageNumber();
   const butt = (document.getElementById('prev-butt') as HTMLButtonElement);
-  if (+currPage < pages && +currPage > 1) {
+  if (+currPage < pages && +currPage > 1) {    
     currPage = (+currPage - 1).toString();
     localStorage.setItem('page', `${+currPage}`);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -165,7 +175,10 @@ export async function prevHandler() {
 }
 export async function nextHandler() {
   const pages = await calcPageNumber();
+  const buttPrev = (document.getElementById('prev-butt') as HTMLButtonElement);
+  buttPrev.disabled = false;
   if (+currPage < pages && +currPage >= 1) {
+    buttPrev.disabled = false;
     currPage = (+currPage + 1).toString();
     localStorage.setItem('page', `${+currPage}`);
     window.dispatchEvent(new HashChangeEvent("hashchange"));

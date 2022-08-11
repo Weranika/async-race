@@ -13,7 +13,6 @@ class Pagination extends Component {
     prevButt.id = 'prev-butt';
     prevButt.className = 'pagination';
     prevButt.innerText = 'PREV';
-    //+currPage === 1 ? prevButt.disabled = true : prevButt.disabled = false;
     prevButt.addEventListener("click", prevHandler);
     this.container.append(prevButt);
 
