@@ -2,6 +2,7 @@ import Component from '../../templates/components';
 import './winners.scss';
 import CarInWinners from '../winnerCarInfo';
 import { ICarForWinners } from '../../../pages/winners/index';
+import { timeSort, winsSort } from '../../../pages/app/hendlers';
 
 class WinnersComponent extends Component {
   private carList: Array<ICarForWinners>;
@@ -46,7 +47,7 @@ class WinnersComponent extends Component {
   }
 
   async renderCars() {
-    const ul = document.createElement('ul')
+    const ul = document.createElement('ul');
     ul.classList.add('winners-container');
 
     const winTitle = document.createElement('div');
@@ -65,17 +66,23 @@ class WinnersComponent extends Component {
 
     const carName = document.createElement('div');
     carName.innerText = 'NAME';
+    carName.id = 'name';
     car.classList.add('car-win-title');
     winTitle.append(carName);
 
     const time = document.createElement('button');
     time.innerText = 'TIME';
+    time.id = 'time';
     time.classList.add('car-win-butt');
+    time.addEventListener("click", timeSort);
+    time.setAttribute('toggle', 'toggle');
     winTitle.append(time);
 
     const wins = document.createElement('button');
     wins.innerText = 'WINS';
     wins.classList.add('car-win-butt');
+    wins.addEventListener("click", winsSort);
+    wins.setAttribute('toggle', 'toggle');
     winTitle.append(wins);
 
     this.carList.forEach((car) => {

@@ -1,10 +1,10 @@
 import { createCar } from "./api";
 import CarList, { ICar } from "../../core/components/car-list";
-import { deleteCar, getCar, updateCar, GetCars, startStopEngine, switchCarEngine } from "../app/api";
+import { deleteCar, getCar, updateCar, createWinners, startStopEngine, switchCarEngine, getWinners, getWinner } from "../app/api";
 import Garage from "../garage";
-import { createRandomName, createRandomColor, speed } from './utils';
-import { PageIds} from './index';
+import { createRandomName, createRandomColor } from './utils';
 import { calcPageNumber } from './utils';
+import WinnersPage from '../../pages/winners/index';
 
 localStorage.setItem('page', '1');
 localStorage.setItem('pageWinners', '1');
@@ -55,18 +55,18 @@ export async function recetCarHandler() {
       div.style.transition = `all 0.3s ease-in`;
   });
 }
+
 export async function raceAllHandler() {
   const carsOnPageResp = await Garage.getCars(+currPage);
   const cars = await carsOnPageResp.data;
-  console.log(cars, 'cars on page')
-  
+  console.log(cars, 'cars on page');
 
-    const carByClass = cars.map(async(car:HTMLElement) => {
+  const carByClass = cars.map(async(car:HTMLElement) => {
     const carId = car.id;
     const div = document.getElementById(`car-${carId}`) as HTMLElement;
     const response = await startStopEngine(carId, 'started');
     const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
-    const speed = (response.data.distance / response.data.velocity) / 1000;
+    const speed = +((response.data.distance / response.data.velocity) / 1000).toFixed(2);
     const passed = Math.round( distanse / speed);
     if (response) {
       const status = await switchCarEngine(carId, 'drive');
@@ -78,10 +78,28 @@ export async function raceAllHandler() {
         console.log(carId, 'ok')
         div.style.transform = `translateX(${distanse}px)`;
         div.style.transition = `all ${speed}s ease-in-out`;
+        try{
+          const winner = await getWinner(carId);
+          
+          //await updateWinners(carId, winInf.wins, speed.toString());
+        }
+         catch (e){
+          const createWinn = await createWinners(carId, speed.toString());
+         } 
+        
       }
     }
-});
-const res = await Promise.all(carByClass);
+  });
+  const res = await Promise.all(carByClass);
+  // res.map(async())
+  // const winner = await getWinner(carId);
+  //       console.log(winner, 'winner');
+  //       const winInf = await winner.data;
+  //       console.log(winInf, winInf.wins, 'data');
+  //       const createWinn = await createWinners(carId, winInf.wins, speed.toString());
+  //       window.dispatch
+
+  console.log(res, '<======')
 }
 
 export async function carTrackHandler(event:MouseEvent) {
@@ -113,7 +131,7 @@ export async function carTrackHandler(event:MouseEvent) {
       } else {
         console.log(carId, 'ok')
         car.style.transform = `translateX(${distanse}px)`;
-        car.style.transition = `all ${speed}s ease-in-out`;        
+        car.style.transition = `all ${speed}s ease-in-out`;
       }
     }
   } else if (id.startsWith('stop-button')) {
@@ -144,3 +162,32 @@ export async function nextHandler() {
   }
 }
 
+export async function timeSort() {
+  const time = document.getElementById('time');
+  if(time?.hasAttribute('toggle')) {
+    //  const cars = await getWinners(+currPage, 'time', 'ASC', 10);
+    
+    time.removeAttribute('toggle');
+    WinnersPage.renderWin('time', 'ASC');
+    //return cars;
+  } else {
+    //const cars = await getWinners(+currPage, 'time', 'DESC', 10);
+    time?.setAttribute('toggle', 'toggle');
+    WinnersPage.renderWin('time', 'DESC');
+    //return cars;
+  }  
+  //window.dispatchEvent(new HashChangeEvent("hashchange"))
+}
+
+export async function winsSort() {
+  const wins = document.getElementById('wins');
+  if(wins?.hasAttribute('toggle')) {
+    const cars = await getWinners(+currPage, 'wins', 'ASC', 10);
+    wins.removeAttribute('toggle');
+  } else {
+    const cars = await getWinners(+currPage, 'wins', 'DESC', 10);
+    
+    wins?.setAttribute('toggle', 'toggle');
+  }  
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+}

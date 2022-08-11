@@ -25,6 +25,3 @@ export async function calcPageNumber () {
   const carsCount = cars.carsCount as string;
   return +carsCount / limitOnPage;
 }
-export async function speed (velocity:number, distance = 50000) {
-  return Math.round(distance/velocity);
-}

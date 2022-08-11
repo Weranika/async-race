@@ -72,13 +72,6 @@ export const updateCar = async (name:string, color:string, id:string) => {
   }
 }
 
-export const getWinners = async (page:number, sort = 'time', order = 'ASC', limit = 10) => {
-  const response = await fetch(`${winners}?_page=${page}&_limit=${limit}`);
-  return {
-    data: await response.json(),
-    carsCount: response.headers.get('X-Total-Count'),
-  }
-}
 export const startStopEngine = async (id:string, status:string) => {
   const response = await fetch(`${startStopServ}?id=${id}&status=${status}`,
   {
@@ -102,4 +95,40 @@ export const switchCarEngine = async (id:string, status:string) => {
       status: 'stopped',
     }
   }
+}
+
+export const getWinners = async (page:number, sort:string, order:string, limit = 10) => {
+  const response = await fetch(`${winners}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
+  return {
+    data: await response.json(),
+    carsCount: response.headers.get('X-Total-Count'),
+  }
+}
+export const getWinner = async (id:string) => {
+  const response = await fetch(`${winners}/${id}`);  
+  if (response.ok) { 
+    return {
+      data: await response.json(),
+    }
+  }
+  else {
+    throw new Error('Car with this id does not exist');
+  }
+}
+
+export const createWinners = async (id:string, time:string) => {
+  const response = await fetch(`${winners}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+      body: JSON.stringify({
+        id: id,
+        wins: 1,
+        time: time
+    })
+  });
+
+  return await response.json();
+  
 }

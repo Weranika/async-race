@@ -22,6 +22,26 @@ class WinnersPage extends Page{
     super(id);
   }
 
+  static async renderWin(sort:string, order:string) {
+    const cars = await getWinners(+currPage, sort, order);
+    const carList = cars.data.map(async (car:ICarForWinners) => {
+      const selectedCar = await getCar(car.id);
+      return {
+        id: car.id,
+        time: car.time,
+        wins: car.wins,
+        name: selectedCar.data.name,
+        color: selectedCar.data.color
+      }
+    })
+    const res = await Promise.all(carList);
+    const winnersComp = new WinnersComponent('div', 'winners', res, cars.carsCount as string);
+    
+    // this.container.append(await winnersComp.winHeader());
+    // this.container.append(await winnersComp.renderCars());
+    // return this.container;
+  }
+
   async render() {
     const cars = await getWinners(+currPage, 'id', 'ASC', 10);
     
