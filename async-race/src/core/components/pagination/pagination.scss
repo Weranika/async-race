@@ -22,6 +22,12 @@ $HEADER-BUTTON-HEIGHT: 23px;
     color: $color-light;
   }
 }
+.pagination:disabled,
+.pagination[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
 .pagination {
   @include button($color-light);
   color: $color-grey;

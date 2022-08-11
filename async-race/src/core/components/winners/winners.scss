@@ -1,0 +1,66 @@
+$color-light: rgb(240, 240, 240);
+$color-grey: rgb(52, 42, 55);
+$color-grey-s: rgb(81, 61, 74);
+$color-grey-m: rgb(53, 29, 44);
+
+
+$HEADER-BUTTON-WIDTH: 70px;
+$HEADER-BUTTON-HEIGHT: 23px;
+$WIDTH-PARAM-CONTAINER: 20rem;
+
+@mixin flex-container() {
+  display: flex;
+  align-items: center;
+  margin-top: 2vh;
+}
+
+.winners-container {
+  list-style-type: none;
+  background-color: rgba(6, 6, 6, 0.4);
+  padding: 10px;
+  border-radius: 5px;
+  min-height: 40vh;
+  margin-bottom: 20px;
+  width: 400px;
+  border: 5px solid $color-light;
+  margin: 20px auto;
+}
+.page-number-container {
+  @include flex-container();
+  h2, span {
+    font-size: 2vw;
+    margin-bottom: 20px;
+  }
+}
+.win-title {
+  @include flex-container();
+  justify-content: space-between;
+  div {
+    width: 20%;
+    text-align: center;
+  }
+  button {
+    width: 14%;
+    text-align: center;
+    border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  &:hover {
+    cursor: pointer;
+    background-color: $color-grey-m;
+    color: $color-light;
+  }
+  }
+  .title-num {
+    width: 10%;
+  }
+  .car-win {
+    width: 25%;
+  }
+}
+.title-car {
+  width: 25%;
+  text-align: left;
+}

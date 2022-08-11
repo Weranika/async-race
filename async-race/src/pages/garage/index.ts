@@ -21,16 +21,16 @@ class Garage extends Page{
 
   static async getCars (page: number) {
     const cars = await GetCars(page);
-    console.log('cars_00', cars);
     return cars;
   }
 
   async render(): Promise<HTMLElement>{
+    const currPage = localStorage.getItem('page') as string;
     this.container.append(this.createCars.render());
     this.container.append(this.updateCars.render());
     this.container.append(this.race.render());
-    const cars = await Garage.getCars(1);
-    const carsList = new CarList('main', 'garage-list', cars.data);
+    const cars = await Garage.getCars(+currPage);
+    const carsList = new CarList('main', 'garage-list', cars.data, cars.carsCount as string);
     this.container.append(await carsList.carInfo());
     this.container.append(await carsList.renderCars());
     this.container.append(this.pagination.render());

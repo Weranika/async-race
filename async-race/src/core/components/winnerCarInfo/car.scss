@@ -35,31 +35,24 @@ $CAR-HEIGHT: 65px;
   align-items: center;
   margin-top: 2vh;
 }
-.car-track {
-  width: $CAR-TRACK-WIDTH;
+.car-winner-line {
+  @include flex-container;
+  border-bottom: 3px dotted $color-light;
+  justify-content: space-between;
+  div {
+    width: 20%;
+    text-align: center;
+  }
+  .car-win-id {
+    width: 10%;
+  }
+  .car-win {
+    width: 25%;
+  }
 }
-.control-button {
-  @include button($color-light, 20px, 20px, rgb(53, 29, 44));
-  font-size: 15px;
-}
-.start-stop-buttons {
-  width: $START-STOP-WIDTH;
-}
-.car {
+.car-win {
   width:$CAR-WIDTH;
   height: $CAR-HEIGHT;
   padding-left: 10px;
   position: relative;
-  top: 0;
-  left: 0;
-}
-.car-drive { 
-  transition: all 3s ease-in-out;
-}
-
-.flag {
-  font-size: 35px;
-  position: relative;
-  top: 15px;
-  left: - calc($CAR-WIDTH);
 }

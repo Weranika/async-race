@@ -1,3 +1,7 @@
+import { GetCars } from './api';
+
+const limitOnPage = 7;
+
 const models = ['Peugeot', 'BMW', 'Opel', 'Audi', 'Ford', 'Renault', 'Porshe', 'Lamborgini', 'KIA', 'Mercedes'];
 const typeCar = ['Coupe', 'Sedan', 'Combi', 'SUV', '5', '6', 'mini', 'Seria 3', 'Seria 4', '307'];
 
@@ -16,4 +20,11 @@ export const createRandomColor = () => {
   }
   return `#${color}`;
 }
-
+export async function calcPageNumber () {
+  const cars = await GetCars(1);
+  const carsCount = cars.carsCount as string;
+  return +carsCount / limitOnPage;
+}
+export async function speed (velocity:number, distance = 50000) {
+  return Math.round(distance/velocity);
+}

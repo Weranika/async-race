@@ -1,6 +1,8 @@
 const server = 'http://127.0.0.1:3000';
 
 const garage = `${server}/garage`;
+const winners = `${server}/winners`;
+const startStopServ = `${server}/engine`;
 
 export const GetCars = async (page:number, limit = 7) => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`);
@@ -43,9 +45,14 @@ export const deleteCar = async (id:string) => {
 }
 
 export const getCar = async (id:string) => {
-  const response = await fetch(`${garage}/${id}`);
-  return {
-    data: await response.json(),
+  const response = await fetch(`${garage}/${id}`);  
+  if (response.ok) { 
+    return {
+      data: await response.json(),
+    }
+  }
+  else {
+    throw new Error('Car with this id does not exist');
   }
 }
 
@@ -62,5 +69,37 @@ export const updateCar = async (name:string, color:string, id:string) => {
   });
   return {
     data: await response.json(),
+  }
+}
+
+export const getWinners = async (page:number, sort = 'time', order = 'ASC', limit = 10) => {
+  const response = await fetch(`${winners}?_page=${page}&_limit=${limit}`);
+  return {
+    data: await response.json(),
+    carsCount: response.headers.get('X-Total-Count'),
+  }
+}
+export const startStopEngine = async (id:string, status:string) => {
+  const response = await fetch(`${startStopServ}?id=${id}&status=${status}`,
+  {
+    method: 'PATCH',
+  });
+    return {
+      data: await response.json()
+    }
+}
+export const switchCarEngine = async (id:string, status:string) => {
+  const response = await fetch(`${startStopServ}?id=${id}&status=${status}`,
+  {
+    method: 'PATCH',
+  });
+  if (response.ok) { 
+    return {
+      data: await response.json(),
+    }
+  } else if (response.status == 500) { 
+    return {
+      status: 'stopped',
+    }
   }
 }

@@ -13,16 +13,17 @@ interface IGetCars {
 }
 
 class CarList extends Component {
-  private carList: Array<ICar>;
-  
+  private carList: Array<ICar>;  
+  private carsCount: string;
 
-  constructor(tagName: string, className: string, carList: Array<ICar>) {
+  constructor(tagName: string, className: string, carList: Array<ICar>, carsCount: string) {
     super(tagName, className);
     this.carList = carList;
+    this.carsCount = carsCount;
   }
 
   async carInfo () {
-    const cars = await GetCars(1);
+    const currPage = localStorage.getItem('page') as string;
 
     const titleContainer = document.createElement('div');
     titleContainer.className = 'title-container';
@@ -32,7 +33,7 @@ class CarList extends Component {
     titleContainer.append(title);
 
     const items = document.createElement('span');
-    items.innerText = cars.carsCount as string;
+    items.innerText = this.carsCount;
     titleContainer.append(items);
 
     const pageNumberContainer = document.createElement('div');
@@ -43,7 +44,7 @@ class CarList extends Component {
     pageNumberContainer.append(pageNumberTitle);
 
     const pageNumber = document.createElement('span');
-    pageNumber.innerText = '1';
+    pageNumber.innerText = currPage;
 
     pageNumberContainer.append(pageNumber);
     this.container.append(titleContainer);
