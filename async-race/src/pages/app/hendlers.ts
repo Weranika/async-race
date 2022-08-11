@@ -1,5 +1,5 @@
 import { createCar } from "./api";
-import CarList from "../../core/components/car-list";
+import CarList, { ICar } from "../../core/components/car-list";
 import { deleteCar, getCar, updateCar, GetCars, startStopEngine, switchCarEngine } from "../app/api";
 import Garage from "../garage";
 import { createRandomName, createRandomColor, speed } from './utils';
@@ -55,6 +55,34 @@ export async function recetCarHandler() {
       div.style.transition = `all 0.3s ease-in`;
   });
 }
+export async function raceAllHandler() {
+  const carsOnPageResp = await Garage.getCars(+currPage);
+  const cars = await carsOnPageResp.data;
+  console.log(cars, 'cars on page')
+  
+
+    const carByClass = cars.map(async(car:HTMLElement) => {
+    const carId = car.id;
+    const div = document.getElementById(`car-${carId}`) as HTMLElement;
+    const response = await startStopEngine(carId, 'started');
+    const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
+    const speed = (response.data.distance / response.data.velocity) / 1000;
+    const passed = Math.round( distanse / speed);
+    if (response) {
+      const status = await switchCarEngine(carId, 'drive');
+      if (status?.status === 'stopped') {
+        console.log(carId, '500');
+        div.style.transform = `translateX(${passed}px)`;
+        div.style.transition = `all ${speed}s ease-in-out`;
+      } else {
+        console.log(carId, 'ok')
+        div.style.transform = `translateX(${distanse}px)`;
+        div.style.transition = `all ${speed}s ease-in-out`;
+      }
+    }
+});
+const res = await Promise.all(carByClass);
+}
 
 export async function carTrackHandler(event:MouseEvent) {
   const id = (event.target as Element).id;
@@ -71,31 +99,23 @@ export async function carTrackHandler(event:MouseEvent) {
   } else if (id.startsWith('start-button')) {
     const carId = id.substring('start-button-'.length);
     const response = await startStopEngine(carId, 'started');
-    console.log(response);
 
     const car = document.getElementById(`car-${carId}`) as HTMLElement;
     const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
     const speed = (response.data.distance / response.data.velocity) / 1000;
-    const passed = Math.round( distanse / response.data.velocity);
+    const passed = Math.round( distanse / speed);
     
     if (response) {
       const status = await switchCarEngine(carId, 'drive');
       if (status?.status === 'stopped') {
-        console.log(carId, 'st')
-        car.style.transform = `translateX(${0}px)`;
-      } else if(status?.data === 'OK') {
+        console.log(carId, '500')
+        car.style.transform = `translateX(${passed}px)`;
+      } else {
         console.log(carId, 'ok')
         car.style.transform = `translateX(${distanse}px)`;
-        car.style.transition = `all ${speed}s ease-in-out`;
+        car.style.transition = `all ${speed}s ease-in-out`;        
       }
-      
-    //   car.style.transform = `translateX(${distanse}px)`;
-    // car.style.transition = `all ${speed}s ease-in-out`;
     }
-
-    car.style.transform = `translateX(${distanse}px)`;
-    car.style.transition = `all ${speed}s ease-in-out`;
-    
   } else if (id.startsWith('stop-button')) {
     const carId = id.substring('stop-button-'.length);
     const response = await startStopEngine(carId, 'stopped');

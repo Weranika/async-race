@@ -1,6 +1,6 @@
 import Component from '../../templates/components';
 import './race.scss';
-import { generateRandomCars, recetCarHandler } from '../../../pages/app/hendlers';
+import { generateRandomCars, recetCarHandler, raceAllHandler } from '../../../pages/app/hendlers';
 
 class Race extends Component {
   constructor(tagName: string, className: string) {
@@ -12,6 +12,7 @@ class Race extends Component {
     buttonRace.id = 'button-race';
     buttonRace.innerText = 'RACE';
     buttonRace.className = 'button-race';
+    buttonRace.addEventListener("click", raceAllHandler);
     this.container.append(buttonRace);
   }
   ResetButton () {

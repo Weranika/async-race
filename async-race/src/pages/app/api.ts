@@ -95,7 +95,7 @@ export const switchCarEngine = async (id:string, status:string) => {
   });
   if (response.ok) { 
     return {
-      data: await response.json(),
+      status: await response.json(),
     }
   } else if (response.status == 500) { 
     return {
