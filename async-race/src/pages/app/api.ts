@@ -42,6 +42,17 @@ export const deleteCar = async (id:string) => {
       console.log("HTTP request unsuccessful")
     }
   })
+  const resp = await fetch(`${winners}/${id}`, {
+    method: 'DELETE'
+  })
+  .then(response => {
+    if (response.ok) { 
+      console.log(`winner ${id} deleted`);
+    }
+    else {
+      console.log("HTTP request unsuccessful")
+    }
+  })
 }
 
 export const getCar = async (id:string) => {
@@ -131,4 +142,21 @@ export const createWinners = async (id:string, time:string) => {
 
   return await response.json();
   
+}
+
+
+export const updateWinner = async (wins:string, time:string, id:string) => {
+  const response = await fetch(`${winners}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: JSON.stringify({
+      wins: wins,
+      time: time
+    })
+  });
+  return {
+    data: await response.json(),
+  }
 }

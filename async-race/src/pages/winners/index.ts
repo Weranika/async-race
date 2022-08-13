@@ -4,8 +4,8 @@ import { getWinners } from "../app/api";
 import { getCar } from "../app/api";
 import Pagination from "../../core/components/pagination/indexWin";
 
-const sort = localStorage.getItem('sort') as string;
-const order = localStorage.getItem('order') as string;
+// const sort = localStorage.getItem('sort') as string;
+// const order = localStorage.getItem('order') as string;
 
 export interface ICarForWinners {
   id: string,
@@ -44,6 +44,9 @@ class WinnersPage extends Page{
   // }
 
   async render() {
+    const sort = localStorage.getItem('sort') as string;
+    const order = localStorage.getItem('order') as string;
+
     const currPageWin = localStorage.getItem('pageWinners') as string;
     const cars = await getWinners(+currPageWin, sort, order, 10);
     console.log(+currPageWin, 'new stor')

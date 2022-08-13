@@ -2,7 +2,7 @@ import Component from '../../templates/components';
 import './winners.scss';
 import CarInWinners from '../winnerCarInfo';
 import { ICarForWinners } from '../../../pages/winners/index';
-import { timeSort, winsSort } from '../../../pages/app/hendlers';
+import { timeSort, idSort, sortBy, winersSort } from '../../../pages/app/hendlers';
 
 class WinnersComponent extends Component {
   private carList: Array<ICarForWinners>;
@@ -54,9 +54,10 @@ class WinnersComponent extends Component {
     winTitle.classList.add('win-title');
     ul.append(winTitle);
 
-    const carId = document.createElement('div');
+    const carId = document.createElement('button');
     carId.innerText = '#';
-    carId.classList.add('title-num');
+    carId.classList.add('car-win-butt');
+    carId.addEventListener("click", idSort);
     winTitle.append(carId);
 
     const car = document.createElement('div');
@@ -81,7 +82,7 @@ class WinnersComponent extends Component {
     const wins = document.createElement('button');
     wins.innerText = 'WINS';
     wins.classList.add('car-win-butt');
-    wins.addEventListener("click", winsSort);
+    wins.addEventListener("click", winersSort);
     wins.setAttribute('toggle', 'toggle');
     winTitle.append(wins);
 

@@ -1,4 +1,4 @@
-import { createCar } from "./api";
+import { createCar, updateWinner } from "./api";
 import CarList, { ICar } from "../../core/components/car-list";
 import { deleteCar, getCar, updateCar, createWinners, startStopEngine, switchCarEngine, getWinners, getWinner } from "../app/api";
 import Garage from "../garage";
@@ -16,8 +16,8 @@ localStorage.setItem('pageWinners', '1');
 localStorage.setItem('sort', 'id');
 localStorage.setItem('order', 'ASC');
 
-const sort = localStorage.getItem('sort') as string;
-const order = localStorage.getItem('order') as string;
+// const sort = localStorage.getItem('sort') as string;
+// const order = localStorage.getItem('order') as string;
 
 let currPage = localStorage.getItem('page') as string;
 let currPageWin = localStorage.getItem('pageWinners') as string;
@@ -31,7 +31,6 @@ async function recreateCars() {
 export async function createCarHandler() {
   const inputValue = (document.getElementById('input-create-cars') as HTMLInputElement).value;
   const inputColor = (document.getElementById('input-color') as HTMLInputElement).value;
-  console.log(inputValue);
   const createCarResp = await createCar(inputValue, inputColor);
   window.dispatchEvent(new HashChangeEvent("hashchange"))
 }
@@ -52,12 +51,16 @@ export async function updateCarHandler() {
 }
 
 export async function generateRandomCars() {
-  alert('please, wait')
+  //alert('please, wait')
+  const createCarsPromises = [];
   for (let i = 0; i < 100; i++) {
-    const created100Cars = await createCar(createRandomName(), createRandomColor());    
+    createCarsPromises.push(createCar(createRandomName(), createRandomColor()))
+    //const created100Cars = await createCar(createRandomName(), createRandomColor());    
   }
+  await Promise.all(createCarsPromises);
+  //alert('Cars were added')
   window.location.reload();
-  console.log('Cars were added');
+  //console.log('Cars were added');
 }
 
 export async function recetCarHandler() {
@@ -71,16 +74,22 @@ export async function recetCarHandler() {
 export async function raceAllHandler() {
   const carsOnPageResp = await Garage.getCars(+currPage);
   const cars = await carsOnPageResp.data;
-  console.log(cars, 'cars on page');
   let arrTime:Array<IWin> = [];
+  // const carData = 
+  //   await Promise.all(cars.map( (car:HTMLElement) => startStopEngine(car.id, 'started')));
+
+  //   carData.map(carSpeed => {
+  //     const speed = +((carSpeed.data.distance / carSpeed.data.velocity) / 1000).toFixed(2);
+  //   })
 
   const carByClass = cars.map(async(car:HTMLElement) => {
     const carId = car.id;
     const div = document.getElementById(`car-${carId}`) as HTMLElement;
     const response = await startStopEngine(carId, 'started');
-    const distanse = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
     const speed = +((response.data.distance / response.data.velocity) / 1000).toFixed(2);
-    const passed = Math.round( distanse / speed);
+    
+    const trackWidth = (document.querySelector('.road') as HTMLElement).offsetWidth - 230;
+    const passed = Math.round( trackWidth / speed);
     
     if (response) {
       const status = await switchCarEngine(carId, 'drive');
@@ -90,23 +99,33 @@ export async function raceAllHandler() {
         div.style.transition = `all ${speed}s ease-in-out`;
       } else {
         console.log(carId, 'ok')
-        div.style.transform = `translateX(${distanse}px)`;
+        div.style.transform = `translateX(${trackWidth}px)`;
         div.style.transition = `all ${speed}s ease-in-out`;
+         
         try{
           const winner = await getWinner(carId);          
-          const winnerData = winner.data;          
-          arrTime.push(winnerData);       
+          const winnerData = winner.data;
+          arrTime.push(winnerData);
+          const minimalTime:string = +winnerData.time < speed ? winnerData.time : speed.toString();
+      
+          await updateWinner(winnerData.wins + 1, minimalTime, carId);
         }
         catch (e){
           const createWinn = await createWinners(carId, speed.toString());
+          const winner = await getWinner(carId);          
+          const winnerData = winner.data;
+          arrTime.push(winnerData);  
         } 
       }
     }
   });
   const res = await Promise.all(carByClass);
+
   const firstTime = arrTime.sort((a, b) => a.time -  b.time); 
   const selectedCar = await getCar(firstTime[0].id);
   const selectedCarInf = selectedCar.data;
+
+
 
   alert(`Wins ${selectedCarInf.name}, time: ${firstTime[0].time}`);
   arrTime = [];
@@ -125,8 +144,7 @@ export async function carTrackHandler(event:MouseEvent) {
     const inputName = document.getElementById('input-update-name') as HTMLInputElement;
     inputName.value = `${selectedCar.data.name}`;
   } else if (id.startsWith('start-button')) {
-    const carId = id.substring('start-button-'.length);
-    console.log(carId)
+    const carId = id.substring('start-button-'.length);    
     const response = await startStopEngine(carId, 'started');
 
     const car = document.getElementById(`car-${carId}`) as HTMLElement;
@@ -134,8 +152,7 @@ export async function carTrackHandler(event:MouseEvent) {
     const speed = (response.data.distance / response.data.velocity) / 1000;
     const passed = Math.round( distanse / speed);
         
-    const stopBtn = document.getElementById(`stop-button-${carId}`) as HTMLButtonElement;
-    console.log(stopBtn)
+    const stopBtn = document.getElementById(`start-button-${carId}`) as HTMLButtonElement;
     stopBtn.disabled = true;
 
     if (response) {
@@ -186,8 +203,7 @@ export async function nextHandler() {
 }
 export async function prevHandlerWin() {
   const pages = await calcWinPageNumber();
-  console.log(pages, +currPageWin)
-  if (+currPageWin <= pages && +currPageWin > 1) {
+  if (+currPageWin < pages && +currPageWin > 1) {
     currPageWin = (+currPageWin - 1).toString();
     localStorage.setItem('pageWinners', `${+currPageWin}`);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -202,32 +218,33 @@ export async function nextHandlerWin() {
   }
 }
 
-export async function timeSort() {
-  //console.log('toggle')
-  const time = document.getElementById('time') as HTMLElement;
-  console.log(time)
-  if (time?.hasAttribute('toggle')) {
-    localStorage.setItem('sort', 'time');
-    time.removeAttribute('toggle');
-    console.log('toggle')
+export function sortBy(val:string) {
+
+  if (localStorage.getItem('sort') === val){
+    if (localStorage.getItem('order') === 'DESC') {
+      localStorage.setItem('order', 'ASC');
+    } else {
+      localStorage.setItem('order', 'DESC');
+    } 
   } else {
-    localStorage.setItem('order', 'DESC');
-    time?.setAttribute('toggle', 'toggle');
-    console.log('no toggle')
-  }  
+    localStorage.setItem('order', 'ASC');
+  }
+
+  localStorage.setItem('sort', val);
+
   window.dispatchEvent(new HashChangeEvent("hashchange"))
 }
 
-export async function winsSort() {
-  const wins = document.getElementById('wins');
-  if(wins?.hasAttribute('toggle')) {
-    const cars = await getWinners(+currPageWin, 'wins', 'ASC', 10);
-    wins.removeAttribute('toggle');
-  } else {
-    const cars = await getWinners(+currPageWin, 'wins', 'DESC', 10);
-    
-    wins?.setAttribute('toggle', 'toggle');
-  }  
-  window.dispatchEvent(new HashChangeEvent("hashchange"));
+export function timeSort() {
+  sortBy('time');
 }
+
+export function idSort() {
+  sortBy('id');
+}
+export function winersSort() {
+  sortBy('wins');
+}
+
+
 

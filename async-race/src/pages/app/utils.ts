@@ -31,5 +31,5 @@ export async function calcWinPageNumber () {
   const cars = await getWinners(+currPageWin, 'id', 'ASC');
   const carsWinsCount = cars.carsCount as string;
   console.log('test', +currPageWin, carsWinsCount)
-  return Math.round(+carsWinsCount / limitOnPage);
+  return Math.floor(+carsWinsCount / limitOnPage);
 }
